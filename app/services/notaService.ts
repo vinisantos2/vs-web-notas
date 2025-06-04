@@ -1,29 +1,36 @@
-import { db } from '../lib/firebase';
-import {
-  collection, doc, getDocs, getDoc, addDoc, updateDoc, deleteDoc
-} from 'firebase/firestore';
+import { db } from '../lib/firebase'; // ajuste se necessário
+import { collection, addDoc, getDocs, deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { Nota } from '../types/nota';
 
-const ref = collection(db, 'notas');
-
 export const notaService = {
-  async getAll() {
-    const snapshot = await getDocs(ref);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as (Nota & { id: string })[];
+  async getAll(): Promise<Nota[]> {
+    const snapshot = await getDocs(collection(db, 'notas'));
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Nota[];
   },
-  async getById(id: string) {
-    const snap = await getDoc(doc(db, 'notas', id));
-    if (!snap.exists()) return null;
-    return { id: snap.id, ...snap.data() } as Nota & { id: string };
-  },
-  async create(data: Nota) {
-    const docRef = await addDoc(ref, data);
-    return docRef.id;
-  },
-  async update(id: string, data: Partial<Nota>) {
-    await updateDoc(doc(db, 'notas', id), data);
-  },
-  async remove(id: string) {
+
+  async delete(id: string) {
     await deleteDoc(doc(db, 'notas', id));
-  }
+  },
+
+  async criarNota(nota: Nota) {
+    await addDoc(collection(db, 'notas'), nota);
+  },
+
+  async getById(id: string): Promise<Nota | null> {
+    const ref = doc(db, 'notas', id);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) return null;
+    return { id: snap.id, ...snap.data() } as Nota;
+  },
+
+  async update(id: string, nota: Nota): Promise<void> {
+    const ref = doc(db, 'notas', id);
+
+    const { id: _, ...notaSemId } = nota;
+
+    await updateDoc(ref, notaSemId);
+  },
 };
