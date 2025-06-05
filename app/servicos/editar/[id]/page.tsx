@@ -2,37 +2,36 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { clienteService } from '@/app/services/clienteService';
-import { Cliente } from '@/app/types/cliente';
-import ClienteForm from '../../componentsCliente/ClienteForm';
+import { servicoService } from '@/app/services/servicoService';
+import FormServico from '../../componetsSevico/FormServico';
 
 export default function EditarClientePage() {
   const router = useRouter();
   const params = useParams();
   const id = params?.id as string;
 
-  const [cliente, setCliente] = useState<Cliente | null>(null);
+  const [servico, setServico] = useState<Servico | null>(null);
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
     async function carregarCliente() {
       if (!id) return;
-      const clienteBuscado = await clienteService.getById(id);
-      if (!clienteBuscado) {
-        alert('Cliente não encontrado.');
-        router.push('/clientes');
+      const servicoBuscado = await servicoService.getById(id);
+      if (!servicoBuscado) {
+        alert('servicos não encontrado.');
+        router.push('/servicos');
         return;
       }
-      setCliente(clienteBuscado);
+      setServico(servicoBuscado);
       setCarregando(false);
     }
 
     carregarCliente();
   }, [id, router]);
 
-  async function atualizar(clienteAtualizado: Cliente) {
+  async function atualizar(servicoAtualizado: Servico) {
     try {
-      await clienteService.update(id, clienteAtualizado);
+      await servicoService.update(id, servicoAtualizado);
       router.push('/clientes');
     } catch (error) {
       console.error('Erro ao atualizar cliente:', error);
@@ -46,8 +45,8 @@ export default function EditarClientePage() {
 
   return (
      <main className="min-h-screen bg-gray-100 p-6 flex justify-center items-start">
-      <ClienteForm
-        clienteInicial={cliente!}
+      <FormServico
+        servicoInicial={servico!}
         onSubmit={atualizar}
         onCancel={() => router.push('/clientes')}
       />

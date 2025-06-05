@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Nota } from '../types/nota';
+import { Nota } from '../../types/nota';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { clienteService } from '../services/clienteService';
-import { servicoService } from '../services/servicoService';
-import { notaService } from '../services/notaService';
+import { clienteService } from '../../services/clienteService';
+import { servicoService } from '../../services/servicoService';
+import { notaService } from '../../services/notaService';
 
 type Props = {
     usuarioId: string;
