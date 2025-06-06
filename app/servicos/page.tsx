@@ -1,50 +1,41 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
+import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 import { servicoService } from '../services/servicoService';
-import { getUserRole } from '../services/usuarioService';
+import { withAuth } from '../lib/withAuth';
 
-type Servico = {
-  id: string;
-  nome: string;
-  descricao: string;
-  valor: number;
-};
-
-export default function ListaServicos() {
-  const [loading, setLoading] = useState(true);
-  const [servicos, setServicos] = useState<Servico[]>([]);
-  const [isAdmin, setIsAdmin] = useState(false);
+ function ListaServicos() {
   const router = useRouter();
 
+  const [servicos, setServicos] = useState<Servico[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false); // substitua pela lógica real se necessário
+
+  // Proteção da rota e carregamento dos serviços
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        router.replace('/login');
+        router.push('/login');
       } else {
-        const role = await getUserRole(user.uid);
-        setIsAdmin(role === 'admin');
-        await carregarServicos();
+        // Aqui você pode verificar se é admin se quiser
+        setIsAdmin(true); // ou alguma lógica baseada em claims ou e-mail
+        const lista = await servicoService.getAll();
+        setServicos(lista);
         setLoading(false);
       }
     });
 
     return () => unsubscribe();
-  }, [router]);
-
-  const carregarServicos = async () => {
-    const lista = await servicoService.getAll();
-    setServicos(lista);
-  };
+  }, []);
 
   const handleDeletar = async (id: string) => {
     if (!confirm('Tem certeza que deseja apagar este serviço?')) return;
-
     await servicoService.remove(id);
-    await carregarServicos();
+    const lista = await servicoService.getAll();
+    setServicos(lista);
   };
 
   if (loading) {
@@ -91,7 +82,10 @@ export default function ListaServicos() {
                     Editar
                   </button>
                   <button
-                    onClick={() => handleDeletar(servico.id)}
+                    onClick={() => {
+                      if (servico.id)
+                        handleDeletar(servico.id)
+                    }}
                     className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-sm"
                   >
                     Apagar
@@ -105,3 +99,6 @@ export default function ListaServicos() {
     </main>
   );
 }
+
+
+export default withAuth(ListaServicos)

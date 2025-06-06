@@ -3,8 +3,9 @@
 import { useRouter } from 'next/navigation';
 import FormServico from '../componetsSevico/FormServico';
 import { servicoService } from '@/app/services/servicoService';
+import { withAuth } from '@/app/lib/withAuth';
 
-export default function NovoServicoPage() {
+function NovoServicoPage() {
   const router = useRouter();
 
   async function salvar(servico: Servico) {
@@ -22,3 +23,5 @@ export default function NovoServicoPage() {
     </main>
   );
 }
+
+export default withAuth(NovoServicoPage)

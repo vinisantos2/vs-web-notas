@@ -4,8 +4,11 @@ import { clienteService } from '@/app/services/clienteService';
 import { useRouter } from 'next/navigation';
 import { Cliente } from '@/app/types/cliente';
 import ClienteForm from '../componentsCliente/ClienteForm';
+import { withAuth } from '@/app/lib/withAuth';
 
-export default function NovoClientePage() {
+
+
+function NovoClientePage() {
   const router = useRouter();
 
   async function salvar(cliente: Cliente) {
@@ -23,3 +26,4 @@ export default function NovoClientePage() {
     </main>
   );
 }
+export default withAuth(NovoClientePage)

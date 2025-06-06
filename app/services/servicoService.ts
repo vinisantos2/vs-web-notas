@@ -40,5 +40,6 @@ export const servicoService = {
   async remove(id: string) {
     const docRef = doc(db, 'servicos', id);
     await deleteDoc(docRef);
-  }
+  },
+
 };

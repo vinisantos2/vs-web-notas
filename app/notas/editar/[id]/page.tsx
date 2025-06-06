@@ -5,8 +5,9 @@ import { useParams, useRouter } from 'next/navigation';
 import { Nota } from '../../../types/nota';
 import { notaService } from '../../../services/notaService';
 import NotaForm from '../../componetsNotas/NotaForm';
+import { withAuth } from '@/app/lib/withAuth';
 
-export default function EditarNotaPage() {
+function EditarNotaPage() {
     const { id } = useParams();
     const router = useRouter();
     const [nota, setNota] = useState<Nota | null>(null);
@@ -41,3 +42,5 @@ export default function EditarNotaPage() {
         </div>
     );
 }
+
+export default withAuth(EditarNotaPage)

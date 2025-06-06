@@ -1,55 +1,45 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { useState } from 'react';
 import { servicoService } from '@/app/services/servicoService';
 import FormServico from '../../componetsSevico/FormServico';
+import { withAuth } from '@/app/lib/withAuth';
 
-export default function EditarClientePage() {
+function EditarClientePage() {
   const router = useRouter();
   const params = useParams();
   const id = params?.id as string;
 
   const [servico, setServico] = useState<Servico | null>(null);
-  const [carregando, setCarregando] = useState(true);
 
-  useEffect(() => {
-    async function carregarCliente() {
-      if (!id) return;
-      const servicoBuscado = await servicoService.getById(id);
-      if (!servicoBuscado) {
-        alert('servicos não encontrado.');
-        router.push('/servicos');
-        return;
-      }
-      setServico(servicoBuscado);
-      setCarregando(false);
-    }
-
-    carregarCliente();
-  }, [id, router]);
+  // Use o hook para proteger a rota e carregar o serviço
+  const [loading, setLoading] = useState(false)
+  const [isAdmi, setIsadmin] = useState(false)
 
   async function atualizar(servicoAtualizado: Servico) {
     try {
       await servicoService.update(id, servicoAtualizado);
-      router.push('/clientes');
+      router.push('/servicos');
     } catch (error) {
-      console.error('Erro ao atualizar cliente:', error);
-      alert('Erro ao atualizar cliente.');
+      console.error('Erro ao atualizar serviço:', error);
+      alert('Erro ao atualizar serviço.');
     }
   }
 
-  if (carregando) {
-    return <p className="p-6">Carregando cliente...</p>;
+  if (loading || !servico) {
+    return <p className="p-6">Carregando serviço...</p>;
   }
 
   return (
-     <main className="min-h-screen bg-gray-100 p-6 flex justify-center items-start">
+    <main className="min-h-screen bg-gray-100 p-6 flex justify-center items-start">
       <FormServico
-        servicoInicial={servico!}
+        servicoInicial={servico}
         onSubmit={atualizar}
-        onCancel={() => router.push('/clientes')}
+        onCancel={() => router.push('/servicos')}
       />
     </main>
   );
 }
+
+export default withAuth(EditarClientePage)

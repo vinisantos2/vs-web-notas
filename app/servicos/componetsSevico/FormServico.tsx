@@ -2,12 +2,6 @@
 
 import { useEffect, useState } from 'react';
 
-type Servico = {
-  nome: string;
-  descricao: string;
-  valor: number;
-};
-
 type Props = {
   servicoInicial?: Servico;
   onSubmit: (data: Servico) => void;

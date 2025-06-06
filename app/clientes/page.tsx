@@ -4,10 +4,13 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Cliente } from '../types/cliente';
 import { clienteService } from '../services/clienteService';
+import { withAuth } from '../lib/withAuth';
 
 type ClienteComId = Cliente & { id: string };
 
-export default function ListaClientes() {
+
+
+function  ListaClientes() {
   const [clientes, setClientes] = useState<ClienteComId[]>([]);
   const [carregando, setCarregando] = useState(true);
 
@@ -83,3 +86,4 @@ export default function ListaClientes() {
     </div>
   );
 }
+export default withAuth(ListaClientes)

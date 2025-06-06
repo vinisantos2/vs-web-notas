@@ -5,8 +5,10 @@ import { useRouter, useParams } from 'next/navigation';
 import { clienteService } from '@/app/services/clienteService';
 import { Cliente } from '@/app/types/cliente';
 import ClienteForm from '../../componentsCliente/ClienteForm';
+import { withAuth } from '@/app/lib/withAuth';
 
-export default function EditarClientePage() {
+
+function EditarClientePage() {
   const router = useRouter();
   const params = useParams();
   const id = params?.id as string;
@@ -45,7 +47,7 @@ export default function EditarClientePage() {
   }
 
   return (
-     <main className="min-h-screen bg-gray-100 p-6 flex justify-center items-start">
+    <main className="min-h-screen bg-gray-100 p-6 flex justify-center items-start">
       <ClienteForm
         clienteInicial={cliente!}
         onSubmit={atualizar}
@@ -54,3 +56,4 @@ export default function EditarClientePage() {
     </main>
   );
 }
+export default withAuth(EditarClientePage)

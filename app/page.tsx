@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { withAuth } from './lib/withAuth';
 
-export default function DashboardPage() {
+ function DashboardPage() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-20 bg-gray-50">
       <div className="max-w-3xl w-full text-center">
@@ -37,3 +38,6 @@ export default function DashboardPage() {
     </main>
   );
 }
+
+
+export default withAuth(DashboardPage)

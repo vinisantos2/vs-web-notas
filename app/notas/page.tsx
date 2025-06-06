@@ -7,6 +7,7 @@ import { auth } from '../lib/firebase';
 import { notaService } from '../services/notaService'; // supondo que exista
 import { getUserRole } from '../services/usuarioService';
 import Navbar from '../components/NavBar';
+import { withAuth } from '../lib/withAuth';
 
 type Nota = {
   id: string;
@@ -17,26 +18,12 @@ type Nota = {
   dataCriacao: string;
 };
 
-export default function ListaNotas() {
+
+function ListaNotas() {
   const [loading, setLoading] = useState(true);
   const [notas, setNotas] = useState<Nota[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        router.replace('/login');
-      } else {
-        const role = await getUserRole(user.uid);
-        setIsAdmin(role === 'admin');
-        await carregarNotas();
-        setLoading(false);
-      }
-    });
-
-    return () => unsubscribe();
-  }, [router]);
 
   const carregarNotas = async () => {
     const lista = await notaService.getAll();
@@ -122,3 +109,5 @@ export default function ListaNotas() {
     </main>
   );
 }
+
+export default withAuth(ListaNotas)

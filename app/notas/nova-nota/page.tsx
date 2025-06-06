@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react';
 import NotaForm from '@/app/notas/componetsNotas/NotaForm';
 import { auth } from '@/app/lib/firebase';
+import { withAuth } from '@/app/lib/withAuth';
 
-export default function NovaNotaPage() {
+
+function NovaNotaPage() {
   const [usuarioId, setUsuarioId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -30,3 +32,5 @@ export default function NovaNotaPage() {
     </main>
   );
 }
+
+export default withAuth(NovaNotaPage)
