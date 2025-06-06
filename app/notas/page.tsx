@@ -1,13 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-import { auth } from '../lib/firebase';
-import { notaService } from '../services/notaService'; // supondo que exista
-import { getUserRole } from '../services/usuarioService';
 import Navbar from '../components/NavBar';
+import { notaService } from '../services/notaService';
 import { withAuth } from '../lib/withAuth';
+import { authService } from '../lib/auth';
 
 type Nota = {
   id: string;
@@ -18,23 +16,46 @@ type Nota = {
   dataCriacao: string;
 };
 
-
 function ListaNotas() {
   const [loading, setLoading] = useState(true);
   const [notas, setNotas] = useState<Nota[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
 
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const usuario = await authService.getUsuarioLogado();
+        setIsAdmin(usuario?.role === 'admin'); // ou qualquer chave usada para definir se é admin
+        await carregarNotas();
+      } catch (error) {
+        console.error('Erro ao carregar dados:', error);
+      }
+    };
+
+    init();
+  }, []);
+
   const carregarNotas = async () => {
-    const lista = await notaService.getAll();
-    setNotas(lista);
+    try {
+      const lista = await notaService.getAll();
+      setNotas(lista);
+    } catch (error) {
+      console.error('Erro ao buscar notas:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDeletar = async (id: string) => {
     if (!confirm('Tem certeza que deseja apagar esta nota?')) return;
 
-    await notaService.delete(id);
-    await carregarNotas();
+    try {
+      await notaService.delete(id);
+      await carregarNotas();
+    } catch (error) {
+      console.error('Erro ao apagar nota:', error);
+    }
   };
 
   if (loading) {
@@ -50,6 +71,7 @@ function ListaNotas() {
 
   return (
     <main className="min-h-screen bg-gray-100 p-20 flex flex-col items-center">
+      <Navbar />
       <h1 className="text-3xl font-bold mb-6">Notas</h1>
 
       {isAdmin && (
@@ -63,6 +85,7 @@ function ListaNotas() {
 
       <section className="w-full max-w-3xl">
         <h2 className="text-xl font-semibold mb-4">Notas Cadastradas</h2>
+
         {notas.length === 0 ? (
           <p>Você ainda não tem nenhuma nota cadastrada.</p>
         ) : (
@@ -110,4 +133,4 @@ function ListaNotas() {
   );
 }
 
-export default withAuth(ListaNotas)
+export default withAuth(ListaNotas);
