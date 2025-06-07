@@ -41,3 +41,5 @@ npm install
 
 ## 🧑‍💼 Sobre
 Esse projeto faz parte da suíte de soluções oferecidas por VS Web & Apps, voltadas para digitalização de negócios com sites e sistemas sob medida.
+
+## 📄 Licença
