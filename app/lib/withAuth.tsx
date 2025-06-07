@@ -6,6 +6,7 @@ import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { auth } from './firebase';
 import { Usuario } from '../types/usuario';
 import { usuarioService } from '../services/usuarioService';
+import Loading from '../components/Loading';
 
 
 export function withAuth<P extends object>(
@@ -20,11 +21,12 @@ export function withAuth<P extends object>(
       const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
         if (!firebaseUser) {
           router.replace('/login');
+          setLoading(false); // ← aqui também!
         } else {
           try {
             const usuario = await usuarioService.getById(firebaseUser.uid);
             if (usuario) {
-              setUser(usuario); // Agora com role e outros dados
+              setUser(usuario);
             } else {
               router.replace('/login');
             }
@@ -32,7 +34,7 @@ export function withAuth<P extends object>(
             console.error('Erro ao buscar usuário:', error);
             router.replace('/login');
           } finally {
-            setLoading(false);
+            setLoading(false); // ← já existe aqui
           }
         }
       });
@@ -40,7 +42,7 @@ export function withAuth<P extends object>(
       return () => unsubscribe();
     }, [router]);
 
-    if (loading) return <p>Carregando...</p>;
+    if (loading) return <Loading msg='Carregando...' />;
     if (!user) return null;
 
     return <WrappedComponent {...props} user={user} />;

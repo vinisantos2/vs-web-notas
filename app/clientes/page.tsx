@@ -6,6 +6,7 @@ import { Cliente } from '../types/cliente';
 import { clienteService } from '../services/clienteService';
 import { withAuth } from '../lib/withAuth';
 import ItemCliente from './componentsCliente/ItemCliente';
+import Loading from '../components/Loading';
 
 type ClienteComId = Cliente & { id: string };
 
@@ -39,7 +40,7 @@ function ListaClientes() {
     }
   }
 
-  if (carregando) return <p>Carregando clientes...</p>;
+  if (carregando) return <Loading msg='Carregando clientes...' />;
 
   return (
     <div className="max-w-3xl mx-auto p-20">
