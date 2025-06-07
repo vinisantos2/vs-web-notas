@@ -40,8 +40,8 @@ export default function GerarNotaPDF({ nota }: Props) {
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <div id="nota-pdf">
           <h2 className="text-xl font-bold mb-4">Nota Fiscal</h2>
-          <p><strong>Cliente:</strong> {nota.clienteId}</p>
-          <p><strong>Serviço:</strong> {nota.servicoId}</p>
+          <p><strong>Cliente:</strong> {nota.clienteNome}</p>
+          <p><strong>Serviço:</strong> {nota.servicoNome}</p>
           <p><strong>Valor:</strong> R$ {nota.valor.toFixed(2)}</p>
           <p><strong>Data:</strong> {new Date(nota.dataCriacao).toLocaleDateString('pt-BR')}</p>
           <p><strong>ID:</strong> {nota.id}</p>

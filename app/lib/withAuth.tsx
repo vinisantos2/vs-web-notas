@@ -7,6 +7,7 @@ import { auth } from './firebase';
 import { Usuario } from '../types/usuario';
 import { usuarioService } from '../services/usuarioService';
 import Loading from '../components/Loading';
+import MsgErro from '../components/MsgErro';
 
 
 export function withAuth<P extends object>(
@@ -49,9 +50,7 @@ export function withAuth<P extends object>(
 
     if (loading) return <Loading msg='Carregando...' />;
     if (!user) return (
-      <div className="text-center mt-10 text-red-500">
-        Usuário não encontrado. Verifique se sua conta está cadastrada corretamente.
-      </div>
+      <MsgErro msg='Usuário não encontrado. Verifique se sua conta está cadastrada corretamente.' />
     );
 
     return <WrappedComponent {...props} user={user} />;
