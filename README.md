@@ -20,11 +20,13 @@ Sistema web para gestão de serviços e emissão de notas, desenvolvido com **Ne
 - [Headless UI (Modal)](https://headlessui.com/)
 - [Lucide Icons](https://lucide.dev/)
 
-## 🖼️ Demonstração
+## 📸 Imagens do Projeto
 
-![VS Web Notas Screenshot](./public/screenshot.png)
+| Página | Imagem |
+|--------|--------|
+| Home | ![Home](./public/images/prints-app/dashboard.png) |
 
-> 📌 Imagem ilustrativa da interface — substitua por uma captura real do app após rodar localmente.
+| Notas | ![Notas](./public/images/prints-app/notas.png) |
 
 ## 🚀 Como executar localmente
 
