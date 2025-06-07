@@ -8,10 +8,9 @@ import { withAuth } from '../lib/withAuth';
 import ItemCliente from './componentsCliente/ItemCliente';
 import Loading from '../components/Loading';
 
-type ClienteComId = Cliente & { id: string };
 
 function ListaClientes() {
-  const [clientes, setClientes] = useState<ClienteComId[]>([]);
+  const [clientes, setClientes] = useState<Cliente[]>([]);
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {

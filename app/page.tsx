@@ -2,14 +2,21 @@
 
 import Link from 'next/link';
 import { withAuth } from './lib/withAuth';
+import { Usuario } from './types/usuario';
 
- function DashboardPage() {
+type Props = {
+  user: Usuario;
+};
+
+function DashboardPage({ user }: Props) {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-20 bg-gray-50">
       <div className="max-w-3xl w-full text-center">
-        <h1 className="text-4xl font-bold mb-4">Bem-vindo ao VS Web & Apps - Notas</h1>
+        <h1 className="text-4xl font-bold mb-2">
+          Bem-vindo, {user.nome || 'usuário'}!
+        </h1>
         <p className="text-lg text-gray-600 mb-10">
-          Escolha uma das opções abaixo para gerenciar seus dados:
+          Este é o sistema da <strong>VS Web & Apps - Notas</strong>. Escolha uma das opções abaixo para gerenciar seus dados:
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -39,5 +46,4 @@ import { withAuth } from './lib/withAuth';
   );
 }
 
-
-export default withAuth(DashboardPage)
+export default withAuth(DashboardPage);
