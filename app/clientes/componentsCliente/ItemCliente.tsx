@@ -29,7 +29,11 @@ export default function ItemCliente({ cliente, isAdmin, handleDeletar }: Props) 
                     Editar
                 </Link>
                 <button
-                    onClick={() => handleDeletar(cliente.id)}
+                    onClick={() => {
+                        if (cliente.id) handleDeletar(cliente.id
+
+                        )
+                    }}
                     className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
                 >
                     Excluir
