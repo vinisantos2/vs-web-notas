@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Nota } from '../../../types/nota';
 import { notaService } from '../../../services/notaService';
-import NotaForm from '../../componetsNotas/NotaForm';
+import NotaForm from '../../componentsNotas/NotaForm';
 import { withAuth } from '@/app/lib/withAuth';
 
 function EditarNotaPage() {

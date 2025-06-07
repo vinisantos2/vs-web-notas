@@ -2,26 +2,39 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { onAuthStateChanged, getAuth, User } from 'firebase/auth';
+import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { auth } from './firebase';
+import { Usuario } from '../types/usuario';
+import { usuarioService } from '../services/usuarioService';
 
 
 export function withAuth<P extends object>(
-  WrappedComponent: React.ComponentType<P>
+  WrappedComponent: React.ComponentType<P & { user: Usuario }>
 ): React.FC<P> {
   const ProtectedComponent: React.FC<P> = (props) => {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<Usuario | null>(null);
 
     useEffect(() => {
-      const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
         if (!firebaseUser) {
           router.replace('/login');
         } else {
-          setUser(firebaseUser);
+          try {
+            const usuario = await usuarioService.getById(firebaseUser.uid);
+            if (usuario) {
+              setUser(usuario); // Agora com role e outros dados
+            } else {
+              router.replace('/login');
+            }
+          } catch (error) {
+            console.error('Erro ao buscar usuário:', error);
+            router.replace('/login');
+          } finally {
+            setLoading(false);
+          }
         }
-        setLoading(false);
       });
 
       return () => unsubscribe();
@@ -30,7 +43,7 @@ export function withAuth<P extends object>(
     if (loading) return <p>Carregando...</p>;
     if (!user) return null;
 
-    return <WrappedComponent {...props} />;
+    return <WrappedComponent {...props} user={user} />;
   };
 
   return ProtectedComponent;

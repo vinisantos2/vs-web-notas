@@ -1,7 +1,7 @@
 'use client'; // se estiver usando app router, garantir que é client component
 
 import { useEffect, useState } from 'react';
-import NotaForm from '@/app/notas/componetsNotas/NotaForm';
+import NotaForm from '@/app/notas/componentsNotas/NotaForm';
 import { auth } from '@/app/lib/firebase';
 import { withAuth } from '@/app/lib/withAuth';
 

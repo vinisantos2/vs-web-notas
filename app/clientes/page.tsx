@@ -5,12 +5,11 @@ import Link from 'next/link';
 import { Cliente } from '../types/cliente';
 import { clienteService } from '../services/clienteService';
 import { withAuth } from '../lib/withAuth';
+import ItemCliente from './componentsCliente/ItemCliente';
 
 type ClienteComId = Cliente & { id: string };
 
-
-
-function  ListaClientes() {
+function ListaClientes() {
   const [clientes, setClientes] = useState<ClienteComId[]>([]);
   const [carregando, setCarregando] = useState(true);
 
@@ -28,7 +27,7 @@ function  ListaClientes() {
     fetchClientes();
   }, []);
 
-  async function deletarCliente(id: string) {
+  async function handleDeletar(id: string) {
     const confirmado = confirm('Tem certeza que deseja excluir este cliente?');
     if (!confirmado) return;
 
@@ -57,31 +56,7 @@ function  ListaClientes() {
       {clientes.length === 0 && <p>Nenhum cliente cadastrado.</p>}
 
       <ul className="space-y-3">
-        {clientes.map((cliente) => (
-          <li
-            key={cliente.id}
-            className="border p-4 rounded flex justify-between items-center"
-          >
-            <div>
-              <p className="font-semibold">{cliente.nome}</p>
-              <p className="text-sm text-gray-600">{cliente.email}</p>
-            </div>
-            <div className="flex gap-2">
-              <Link
-                href={`/clientes/editar/${cliente.id}`}
-                className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
-              >
-                Editar
-              </Link>
-              <button
-                onClick={() => deletarCliente(cliente.id)}
-                className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
-              >
-                Excluir
-              </button>
-            </div>
-          </li>
-        ))}
+        {clientes.map((cliente) => <ItemCliente  key={cliente.id} cliente={cliente} handleDeletar={handleDeletar} />)}
       </ul>
     </div>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import FormServico from '../componetsSevico/FormServico';
+import FormServico from '../componentsSevico/FormServico';
 import { servicoService } from '@/app/services/servicoService';
 import { withAuth } from '@/app/lib/withAuth';
 

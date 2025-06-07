@@ -3,7 +3,7 @@
 import { useRouter, useParams } from 'next/navigation';
 import { useState } from 'react';
 import { servicoService } from '@/app/services/servicoService';
-import FormServico from '../../componetsSevico/FormServico';
+import FormServico from '../../componentsSevico/FormServico';
 import { withAuth } from '@/app/lib/withAuth';
 
 function EditarClientePage() {
