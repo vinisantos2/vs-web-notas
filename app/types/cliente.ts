@@ -1,5 +1,5 @@
 export type Cliente = {
-  id: string
+  id?: string
   nome: string;
   email: string;
   telefone?: string;
